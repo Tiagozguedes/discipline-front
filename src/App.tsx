@@ -9,7 +9,7 @@ import { Finance } from '@/pages/Finance';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/discipline-front">
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
