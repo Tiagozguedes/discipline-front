@@ -11,19 +11,7 @@ import {
   TrendingUp,
   Zap,
 } from 'lucide-react';
-
-interface DashboardData {
-  tasks: { total: number; todo: number; inProgress: number; done: number };
-  pomodoro: { todayMinutes: number; todaySessions: number; weekMinutes: number };
-  habits: { totalActive: number; completedToday: number };
-  finance: {
-    monthIncome: number;
-    monthExpense: number;
-    monthBalance: number;
-    totalInvested: number;
-    totalInvestmentValue: number;
-  };
-}
+import type { DashboardData } from '@/types';
 
 export function Dashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
@@ -57,78 +45,78 @@ export function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-          <p className="text-neutral-400 text-sm mt-1">
+          <h1 className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Dashboard</h1>
+          <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
             Visao geral do seu progresso
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-4 py-2 bg-neutral-900 rounded-xl border border-neutral-800">
+          <div className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl border" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
             <Zap size={18} className="text-yellow-500" />
-            <span className="text-sm font-medium text-neutral-300">Discipline Score</span>
+            <span className="text-xs sm:text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Discipline Score</span>
             <span className="text-lg font-bold text-yellow-500">{disciplineScore}</span>
           </div>
         </div>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {/* Pomodoro Card */}
-        <Card className="bg-neutral-900 border-neutral-800">
+        <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-neutral-400">Foco Hoje</CardTitle>
+            <CardTitle className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Foco Hoje</CardTitle>
             <Timer size={18} className="text-yellow-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">{formatTime(data.pomodoro.todayMinutes)}</div>
-            <p className="text-xs text-neutral-500 mt-1">{data.pomodoro.todaySessions} sessoes completadas</p>
-            <p className="text-xs text-neutral-500">{formatTime(data.pomodoro.weekMinutes)} esta semana</p>
+            <div className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{formatTime(data.pomodoro.todayMinutes)}</div>
+            <p className="text-xs mt-1 hidden sm:block" style={{ color: 'var(--text-muted)' }}>{data.pomodoro.todaySessions} sessoes completadas</p>
+            <p className="text-xs hidden sm:block" style={{ color: 'var(--text-muted)' }}>{formatTime(data.pomodoro.weekMinutes)} esta semana</p>
           </CardContent>
         </Card>
 
         {/* Tasks Card */}
-        <Card className="bg-neutral-900 border-neutral-800">
+        <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-neutral-400">Tarefas</CardTitle>
+            <CardTitle className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Tarefas</CardTitle>
             <CheckSquare size={18} className="text-yellow-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">{data.tasks.done}/{data.tasks.total}</div>
-            <Progress value={taskCompletion} className="mt-2 h-1.5 bg-neutral-800" />
-            <p className="text-xs text-neutral-500 mt-1">{data.tasks.inProgress} em progresso</p>
+            <div className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{data.tasks.done}/{data.tasks.total}</div>
+            <Progress value={taskCompletion} className="mt-2 h-1.5" style={{ backgroundColor: 'var(--bg-input)' }} />
+            <p className="text-xs mt-1 hidden sm:block" style={{ color: 'var(--text-muted)' }}>{data.tasks.inProgress} em progresso</p>
           </CardContent>
         </Card>
 
         {/* Habits Card */}
-        <Card className="bg-neutral-900 border-neutral-800">
+        <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-neutral-400">Habitos Hoje</CardTitle>
+            <CardTitle className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Habitos Hoje</CardTitle>
             <Target size={18} className="text-yellow-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">
+            <div className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
               {data.habits.completedToday}/{data.habits.totalActive}
             </div>
-            <Progress value={habitCompletion} className="mt-2 h-1.5 bg-neutral-800" />
-            <p className="text-xs text-neutral-500 mt-1">{habitCompletion}% completado</p>
+            <Progress value={habitCompletion} className="mt-2 h-1.5" style={{ backgroundColor: 'var(--bg-input)' }} />
+            <p className="text-xs mt-1 hidden sm:block" style={{ color: 'var(--text-muted)' }}>{habitCompletion}% completado</p>
           </CardContent>
         </Card>
 
         {/* Finance Card */}
-        <Card className="bg-neutral-900 border-neutral-800">
+        <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-neutral-400">Balanco Mensal</CardTitle>
+            <CardTitle className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Balanco Mensal</CardTitle>
             <DollarSign size={18} className="text-yellow-500" />
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${data.finance.monthBalance >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+            <div className={`text-xl sm:text-2xl font-bold ${data.finance.monthBalance >= 0 ? 'text-green-400' : 'text-red-400'}`}>
               {formatCurrency(data.finance.monthBalance)}
             </div>
             <div className="flex items-center gap-1 mt-1">
               <TrendingUp size={12} className="text-green-400" />
-              <p className="text-xs text-neutral-500">
+              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
                 Investido: {formatCurrency(data.finance.totalInvested)}
               </p>
             </div>
@@ -138,40 +126,40 @@ export function Dashboard() {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card className="bg-neutral-900 border-neutral-800">
+        <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
           <CardHeader>
-            <CardTitle className="text-base text-white">Resumo Financeiro</CardTitle>
+            <CardTitle className="text-base" style={{ color: 'var(--text-primary)' }}>Resumo Financeiro</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-neutral-400">Receitas</span>
+              <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>Receitas</span>
               <span className="text-sm font-medium text-green-400">{formatCurrency(data.finance.monthIncome)}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-neutral-400">Despesas</span>
+              <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>Despesas</span>
               <span className="text-sm font-medium text-red-400">{formatCurrency(data.finance.monthExpense)}</span>
             </div>
-            <div className="border-t border-neutral-800 pt-2 flex justify-between items-center">
-              <span className="text-sm font-medium text-neutral-300">Saldo</span>
+            <div className="border-t pt-2 flex justify-between items-center" style={{ borderColor: 'var(--border-primary)' }}>
+              <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Saldo</span>
               <span className={`text-sm font-bold ${data.finance.monthBalance >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                 {formatCurrency(data.finance.monthBalance)}
               </span>
             </div>
-            <div className="border-t border-neutral-800 pt-2 flex justify-between items-center">
-              <span className="text-sm text-neutral-400">Patrimonio Investido</span>
+            <div className="border-t pt-2 flex justify-between items-center" style={{ borderColor: 'var(--border-primary)' }}>
+              <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>Patrimonio Investido</span>
               <span className="text-sm font-medium text-yellow-500">{formatCurrency(data.finance.totalInvestmentValue)}</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-neutral-900 border-neutral-800">
+        <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
           <CardHeader>
-            <CardTitle className="text-base text-white">Discipline Score</CardTitle>
+            <CardTitle className="text-base" style={{ color: 'var(--text-primary)' }}>Discipline Score</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-center">
-              <div className="relative w-32 h-32">
-                <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 120 120">
+              <div className="relative w-24 h-24 sm:w-32 sm:h-32">
+                <svg className="w-24 h-24 sm:w-32 sm:h-32 transform -rotate-90" viewBox="0 0 120 120">
                   <circle cx="60" cy="60" r="50" stroke="#262626" strokeWidth="10" fill="none" />
                   <circle
                     cx="60" cy="60" r="50"
@@ -183,22 +171,22 @@ export function Dashboard() {
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-3xl font-bold text-yellow-500">{disciplineScore}</span>
+                  <span className="text-2xl sm:text-3xl font-bold text-yellow-500">{disciplineScore}</span>
                 </div>
               </div>
             </div>
             <div className="space-y-2">
               <div className="flex justify-between text-xs">
-                <span className="text-neutral-400">Pomodoro</span>
-                <span className="text-neutral-300">{Math.round(pomodoroScore)}/30</span>
+                <span style={{ color: 'var(--text-secondary)' }}>Pomodoro</span>
+                <span style={{ color: 'var(--text-primary)' }}>{Math.round(pomodoroScore)}/30</span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-neutral-400">Tarefas</span>
-                <span className="text-neutral-300">{Math.round(taskScore)}/30</span>
+                <span style={{ color: 'var(--text-secondary)' }}>Tarefas</span>
+                <span style={{ color: 'var(--text-primary)' }}>{Math.round(taskScore)}/30</span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-neutral-400">Habitos</span>
-                <span className="text-neutral-300">{Math.round(habitScore)}/40</span>
+                <span style={{ color: 'var(--text-secondary)' }}>Habitos</span>
+                <span style={{ color: 'var(--text-primary)' }}>{Math.round(habitScore)}/40</span>
               </div>
             </div>
           </CardContent>

@@ -28,41 +28,7 @@ import {
   Tooltip,
   CartesianGrid,
 } from 'recharts';
-
-interface Transaction {
-  id: number;
-  description: string;
-  amount: number;
-  type: string;
-  category: string;
-  date: string;
-}
-
-interface Investment {
-  id: number;
-  name: string;
-  type: string;
-  amountInvested: number;
-  currentValue: number;
-  purchaseDate: string;
-  notes: string;
-}
-
-interface FinanceSummary {
-  totalIncome: number;
-  totalExpense: number;
-  balance: number;
-  expensesByCategory: { category: string; amount: number }[];
-  incomeByCategory: { category: string; amount: number }[];
-}
-
-interface InvestmentSummary {
-  totalInvested: number;
-  totalCurrentValue: number;
-  profit: number;
-  profitPercentage: number;
-  allocation: { type: string; value: number }[];
-}
+import type { Transaction, Investment, FinanceSummary, InvestmentSummary } from '@/types';
 
 const EXPENSE_CATEGORIES = [
   'Alimentacao', 'Transporte', 'Moradia', 'Saude', 'Educacao',
@@ -147,40 +113,40 @@ export function Finance() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Financeiro</h1>
-        <p className="text-neutral-400 text-sm mt-1">Controle de gastos, investimentos e metas</p>
+        <h1 className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Financeiro</h1>
+        <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>Controle de gastos, investimentos e metas</p>
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-neutral-900 border-neutral-800">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+        <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-neutral-400">Receitas</p>
-                <p className="text-xl font-bold text-green-400">{formatCurrency(summary?.totalIncome ?? 0)}</p>
+                <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Receitas</p>
+                <p className="text-base sm:text-xl font-bold text-green-400">{formatCurrency(summary?.totalIncome ?? 0)}</p>
               </div>
               <ArrowUpRight className="text-green-400" size={20} />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-neutral-900 border-neutral-800">
+        <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-neutral-400">Despesas</p>
-                <p className="text-xl font-bold text-red-400">{formatCurrency(summary?.totalExpense ?? 0)}</p>
+                <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Despesas</p>
+                <p className="text-base sm:text-xl font-bold text-red-400">{formatCurrency(summary?.totalExpense ?? 0)}</p>
               </div>
               <ArrowDownRight className="text-red-400" size={20} />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-neutral-900 border-neutral-800">
+        <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-neutral-400">Saldo</p>
-                <p className={`text-xl font-bold ${(summary?.balance ?? 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Saldo</p>
+                <p className={`text-base sm:text-xl font-bold ${(summary?.balance ?? 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                   {formatCurrency(summary?.balance ?? 0)}
                 </p>
               </div>
@@ -188,12 +154,12 @@ export function Finance() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-neutral-900 border-neutral-800">
+        <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-neutral-400">Patrimonio</p>
-                <p className="text-xl font-bold text-yellow-500">{formatCurrency(investSummary?.totalCurrentValue ?? 0)}</p>
+                <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Patrimonio</p>
+                <p className="text-base sm:text-xl font-bold text-yellow-500">{formatCurrency(investSummary?.totalCurrentValue ?? 0)}</p>
               </div>
               <TrendingUp className="text-yellow-500" size={20} />
             </div>
@@ -208,7 +174,7 @@ export function Finance() {
 
       {/* Tabs */}
       <Tabs defaultValue="transactions" className="space-y-4">
-        <TabsList className="bg-neutral-900 border border-neutral-800">
+        <TabsList style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }} className="border">
           <TabsTrigger value="transactions" className="data-[state=active]:bg-yellow-500/10 data-[state=active]:text-yellow-500">
             Transacoes
           </TabsTrigger>
@@ -229,26 +195,28 @@ export function Finance() {
           </div>
 
           {showTxForm && (
-            <Card className="bg-neutral-900 border-neutral-800">
+            <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
               <CardContent className="p-4">
                 <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
                   <Input
                     value={newTx.description}
                     onChange={(e) => setNewTx({ ...newTx, description: e.target.value })}
                     placeholder="Descricao..."
-                    className="bg-neutral-800 border-neutral-700 text-white md:col-span-2"
+                    className="md:col-span-2"
+                    style={{ backgroundColor: 'var(--bg-input)', borderColor: 'var(--border-secondary)', color: 'var(--text-primary)' }}
                   />
                   <Input
                     type="number"
                     value={newTx.amount}
                     onChange={(e) => setNewTx({ ...newTx, amount: e.target.value })}
                     placeholder="Valor"
-                    className="bg-neutral-800 border-neutral-700 text-white"
+                    style={{ backgroundColor: 'var(--bg-input)', borderColor: 'var(--border-secondary)', color: 'var(--text-primary)' }}
                   />
                   <select
                     value={newTx.type}
                     onChange={(e) => setNewTx({ ...newTx, type: e.target.value, category: e.target.value === 'income' ? 'Salario' : 'Alimentacao' })}
-                    className="px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white text-sm"
+                    className="px-3 py-2 rounded-lg border text-sm"
+                    style={{ backgroundColor: 'var(--bg-input)', borderColor: 'var(--border-secondary)', color: 'var(--text-primary)' }}
                   >
                     <option value="expense">Despesa</option>
                     <option value="income">Receita</option>
@@ -256,7 +224,8 @@ export function Finance() {
                   <select
                     value={newTx.category}
                     onChange={(e) => setNewTx({ ...newTx, category: e.target.value })}
-                    className="px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white text-sm"
+                    className="px-3 py-2 rounded-lg border text-sm"
+                    style={{ backgroundColor: 'var(--bg-input)', borderColor: 'var(--border-secondary)', color: 'var(--text-primary)' }}
                   >
                     {(newTx.type === 'expense' ? EXPENSE_CATEGORIES : INCOME_CATEGORIES).map((c) => (
                       <option key={c} value={c}>{c}</option>
@@ -273,18 +242,17 @@ export function Finance() {
           {/* Transaction list */}
           <div className="space-y-2">
             {transactions.map((tx) => (
-              <Card key={tx.id} className="bg-neutral-900 border-neutral-800 group">
+              <Card key={tx.id} className="group" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
                 <CardContent className="p-3 flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    tx.type === 'income' ? 'bg-green-500/10' : 'bg-red-500/10'
-                  }`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${tx.type === 'income' ? 'bg-green-500/10' : 'bg-red-500/10'
+                    }`}>
                     {tx.type === 'income' ? <TrendingUp size={14} className="text-green-400" /> : <TrendingDown size={14} className="text-red-400" />}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-white truncate">{tx.description}</p>
+                    <p className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>{tx.description}</p>
                     <div className="flex items-center gap-2 mt-0.5">
-                      <Badge variant="outline" className="text-xs border-neutral-700 text-neutral-400">{tx.category}</Badge>
-                      <span className="text-xs text-neutral-500">{new Date(tx.date).toLocaleDateString('pt-BR')}</span>
+                      <Badge variant="outline" className="text-xs" style={{ borderColor: 'var(--border-secondary)', color: 'var(--text-muted)' }}>{tx.category}</Badge>
+                      <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{new Date(tx.date).toLocaleDateString('pt-BR')}</span>
                     </div>
                   </div>
                   <span className={`text-sm font-bold ${tx.type === 'income' ? 'text-green-400' : 'text-red-400'}`}>
@@ -292,7 +260,8 @@ export function Finance() {
                   </span>
                   <button
                     onClick={() => deleteTx(tx.id)}
-                    className="p-1 rounded hover:bg-neutral-800 text-neutral-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="p-1 rounded hover:text-red-400 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity"
+                    style={{ color: 'var(--text-muted)' }}
                   >
                     <Trash2 size={14} />
                   </button>
@@ -300,7 +269,7 @@ export function Finance() {
               </Card>
             ))}
             {transactions.length === 0 && (
-              <div className="text-center py-8 text-neutral-500">
+              <div className="text-center py-8" style={{ color: 'var(--text-muted)' }}>
                 <DollarSign size={40} className="mx-auto mb-2 opacity-50" />
                 <p>Nenhuma transacao neste mes</p>
               </div>
@@ -317,19 +286,20 @@ export function Finance() {
           </div>
 
           {showInvForm && (
-            <Card className="bg-neutral-900 border-neutral-800">
+            <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
               <CardContent className="p-4">
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
                   <Input
                     value={newInv.name}
                     onChange={(e) => setNewInv({ ...newInv, name: e.target.value })}
                     placeholder="Nome do investimento..."
-                    className="bg-neutral-800 border-neutral-700 text-white"
+                    style={{ backgroundColor: 'var(--bg-input)', borderColor: 'var(--border-secondary)', color: 'var(--text-primary)' }}
                   />
                   <select
                     value={newInv.type}
                     onChange={(e) => setNewInv({ ...newInv, type: e.target.value })}
-                    className="px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white text-sm"
+                    className="px-3 py-2 rounded-lg border text-sm"
+                    style={{ backgroundColor: 'var(--bg-input)', borderColor: 'var(--border-secondary)', color: 'var(--text-primary)' }}
                   >
                     {INVESTMENT_TYPES.map((t) => (
                       <option key={t.value} value={t.value}>{t.label}</option>
@@ -340,14 +310,14 @@ export function Finance() {
                     value={newInv.amountInvested}
                     onChange={(e) => setNewInv({ ...newInv, amountInvested: e.target.value })}
                     placeholder="Valor investido"
-                    className="bg-neutral-800 border-neutral-700 text-white"
+                    style={{ backgroundColor: 'var(--bg-input)', borderColor: 'var(--border-secondary)', color: 'var(--text-primary)' }}
                   />
                   <Input
                     type="number"
                     value={newInv.currentValue}
                     onChange={(e) => setNewInv({ ...newInv, currentValue: e.target.value })}
                     placeholder="Valor atual"
-                    className="bg-neutral-800 border-neutral-700 text-white"
+                    style={{ backgroundColor: 'var(--bg-input)', borderColor: 'var(--border-secondary)', color: 'var(--text-primary)' }}
                   />
                   <Button onClick={createInvestment} className="bg-yellow-500 hover:bg-yellow-400 text-black">
                     Criar
@@ -363,26 +333,27 @@ export function Finance() {
               const profit = inv.currentValue - inv.amountInvested;
               const profitPct = inv.amountInvested > 0 ? (profit / inv.amountInvested) * 100 : 0;
               return (
-                <Card key={inv.id} className="bg-neutral-900 border-neutral-800 group">
+                <Card key={inv.id} className="group" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
                   <CardContent className="p-4 flex items-center gap-4">
                     <div className="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center flex-shrink-0">
                       <TrendingUp size={18} className="text-yellow-500" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-white">{inv.name}</p>
-                      <Badge variant="outline" className="text-xs border-neutral-700 text-neutral-400 mt-1">
+                      <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{inv.name}</p>
+                      <Badge variant="outline" className="text-xs mt-1" style={{ borderColor: 'var(--border-secondary)', color: 'var(--text-muted)' }}>
                         {getInvTypeLabel(inv.type)}
                       </Badge>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold text-white">{formatCurrency(inv.currentValue)}</p>
+                      <p className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>{formatCurrency(inv.currentValue)}</p>
                       <p className={`text-xs ${profit >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                         {profit >= 0 ? '+' : ''}{formatCurrency(profit)} ({profitPct.toFixed(1)}%)
                       </p>
                     </div>
                     <button
                       onClick={() => deleteInv(inv.id)}
-                      className="p-1 rounded hover:bg-neutral-800 text-neutral-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="p-1 rounded hover:text-red-400 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity"
+                      style={{ color: 'var(--text-muted)' }}
                     >
                       <Trash2 size={14} />
                     </button>
@@ -391,7 +362,7 @@ export function Finance() {
               );
             })}
             {investments.length === 0 && (
-              <div className="text-center py-8 text-neutral-500">
+              <div className="text-center py-8" style={{ color: 'var(--text-muted)' }}>
                 <PieChart size={40} className="mx-auto mb-2 opacity-50" />
                 <p>Nenhum investimento registrado</p>
               </div>
@@ -403,9 +374,9 @@ export function Finance() {
         <TabsContent value="reports" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Expenses by category */}
-            <Card className="bg-neutral-900 border-neutral-800">
+            <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
               <CardHeader>
-                <CardTitle className="text-base text-white">Despesas por Categoria</CardTitle>
+                <CardTitle className="text-base" style={{ color: 'var(--text-primary)' }}>Despesas por Categoria</CardTitle>
               </CardHeader>
               <CardContent>
                 {summary && summary.expensesByCategory.length > 0 ? (
@@ -433,7 +404,7 @@ export function Finance() {
                     </RechartsPie>
                   </ResponsiveContainer>
                 ) : (
-                  <div className="flex items-center justify-center h-48 text-neutral-500 text-sm">
+                  <div className="flex items-center justify-center h-48 text-sm" style={{ color: 'var(--text-muted)' }}>
                     Sem dados para exibir
                   </div>
                 )}
@@ -441,9 +412,9 @@ export function Finance() {
             </Card>
 
             {/* Investment allocation */}
-            <Card className="bg-neutral-900 border-neutral-800">
+            <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
               <CardHeader>
-                <CardTitle className="text-base text-white">Alocacao de Investimentos</CardTitle>
+                <CardTitle className="text-base" style={{ color: 'var(--text-primary)' }}>Alocacao de Investimentos</CardTitle>
               </CardHeader>
               <CardContent>
                 {investSummary && investSummary.allocation.length > 0 ? (
@@ -471,7 +442,7 @@ export function Finance() {
                     </RechartsPie>
                   </ResponsiveContainer>
                 ) : (
-                  <div className="flex items-center justify-center h-48 text-neutral-500 text-sm">
+                  <div className="flex items-center justify-center h-48 text-sm" style={{ color: 'var(--text-muted)' }}>
                     Sem dados para exibir
                   </div>
                 )}
@@ -479,9 +450,9 @@ export function Finance() {
             </Card>
 
             {/* Income vs Expenses bar chart */}
-            <Card className="bg-neutral-900 border-neutral-800 md:col-span-2">
+            <Card className="md:col-span-2" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
               <CardHeader>
-                <CardTitle className="text-base text-white">Receitas vs Despesas</CardTitle>
+                <CardTitle className="text-base" style={{ color: 'var(--text-primary)' }}>Receitas vs Despesas</CardTitle>
               </CardHeader>
               <CardContent>
                 {summary ? (
@@ -507,7 +478,7 @@ export function Finance() {
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
-                  <div className="flex items-center justify-center h-48 text-neutral-500 text-sm">
+                  <div className="flex items-center justify-center h-48 text-sm" style={{ color: 'var(--text-muted)' }}>
                     Sem dados para exibir
                   </div>
                 )}

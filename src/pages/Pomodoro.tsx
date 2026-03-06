@@ -4,12 +4,7 @@ import { formatTime } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Play, Pause, RotateCcw, Coffee, Brain } from 'lucide-react';
-
-interface PomodoroStats {
-  totalMinutes: number;
-  totalSessions: number;
-  period: string;
-}
+import type { PomodoroStats } from '@/types';
 
 type SessionType = 'focus' | 'short_break' | 'long_break';
 
@@ -93,17 +88,17 @@ export function Pomodoro() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Pomodoro</h1>
-        <p className="text-neutral-400 text-sm mt-1">Mantenha o foco com sessoes cronometradas</p>
+        <h1 className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Pomodoro</h1>
+        <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>Mantenha o foco com sessoes cronometradas</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Timer */}
         <div className="lg:col-span-2">
-          <Card className="bg-neutral-900 border-neutral-800">
-            <CardContent className="p-8">
+          <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
+            <CardContent className="p-4 sm:p-8">
               {/* Session type tabs */}
-              <div className="flex gap-2 justify-center mb-8">
+              <div className="flex gap-1 sm:gap-2 justify-center mb-6 sm:mb-8">
                 {([
                   { type: 'focus' as SessionType, label: 'Foco', icon: Brain },
                   { type: 'short_break' as SessionType, label: 'Pausa Curta', icon: Coffee },
@@ -112,22 +107,22 @@ export function Pomodoro() {
                   <button
                     key={type}
                     onClick={() => switchSession(type)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      sessionType === type
-                        ? 'bg-yellow-500/10 text-yellow-500'
-                        : 'text-neutral-400 hover:text-white hover:bg-neutral-800'
-                    }`}
+                    className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 rounded-lg text-sm font-medium transition-colors ${sessionType === type
+                      ? 'bg-yellow-500/10 text-yellow-500'
+                      : 'hover:bg-black/5 dark:hover:bg-white/5'
+                      }`}
+                    style={sessionType === type ? {} : { color: 'var(--text-secondary)' }}
                   >
                     <Icon size={16} />
-                    {label}
+                    <span className="hidden sm:inline">{label}</span>
                   </button>
                 ))}
               </div>
 
               {/* Timer display */}
-              <div className="flex items-center justify-center mb-8">
-                <div className="relative w-64 h-64">
-                  <svg className="w-64 h-64 transform -rotate-90" viewBox="0 0 240 240">
+              <div className="flex items-center justify-center mb-6 sm:mb-8">
+                <div className="relative w-48 h-48 sm:w-64 sm:h-64">
+                  <svg className="w-48 h-48 sm:w-64 sm:h-64 transform -rotate-90" viewBox="0 0 240 240">
                     <circle cx="120" cy="120" r="105" stroke="#262626" strokeWidth="8" fill="none" />
                     <circle
                       cx="120" cy="120" r="105"
@@ -140,10 +135,10 @@ export function Pomodoro() {
                     />
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-6xl font-bold text-white tabular-nums">
+                    <span className="text-4xl sm:text-6xl font-bold tabular-nums" style={{ color: 'var(--text-primary)' }}>
                       {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
                     </span>
-                    <span className="text-neutral-500 text-sm mt-2 capitalize">
+                    <span className="text-sm mt-2 capitalize" style={{ color: 'var(--text-muted)' }}>
                       {sessionType === 'focus' ? 'Foco' : sessionType === 'short_break' ? 'Pausa Curta' : 'Pausa Longa'}
                     </span>
                   </div>
@@ -156,7 +151,8 @@ export function Pomodoro() {
                   onClick={resetTimer}
                   variant="outline"
                   size="icon"
-                  className="w-12 h-12 rounded-full border-neutral-700 bg-neutral-800 hover:bg-neutral-700 text-neutral-300"
+                  className="w-12 h-12 rounded-full"
+                  style={{ borderColor: 'var(--border-secondary)', backgroundColor: 'var(--bg-input)', color: 'var(--text-secondary)' }}
                 >
                   <RotateCcw size={20} />
                 </Button>
@@ -174,9 +170,9 @@ export function Pomodoro() {
 
         {/* Stats sidebar */}
         <div className="space-y-4">
-          <Card className="bg-neutral-900 border-neutral-800">
+          <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-neutral-400">Sessoes Hoje</CardTitle>
+              <CardTitle className="text-sm" style={{ color: 'var(--text-secondary)' }}>Sessoes Hoje</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-yellow-500">
@@ -185,31 +181,31 @@ export function Pomodoro() {
             </CardContent>
           </Card>
 
-          <Card className="bg-neutral-900 border-neutral-800">
+          <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-neutral-400">Tempo Focado Hoje</CardTitle>
+              <CardTitle className="text-sm" style={{ color: 'var(--text-secondary)' }}>Tempo Focado Hoje</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-white">
+              <div className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>
                 {formatTime(stats?.totalMinutes ?? 0)}
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-neutral-900 border-neutral-800">
+          <Card style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-neutral-400">Ciclos Completados</CardTitle>
+              <CardTitle className="text-sm" style={{ color: 'var(--text-secondary)' }}>Ciclos Completados</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex gap-2">
                 {[0, 1, 2, 3].map((i) => (
                   <div
                     key={i}
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
-                      i < sessionsCompleted % 4
-                        ? 'bg-yellow-500 text-black'
-                        : 'bg-neutral-800 text-neutral-500'
-                    }`}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${i < sessionsCompleted % 4
+                      ? 'bg-yellow-500 text-black'
+                      : ''
+                      }`}
+                    style={i < sessionsCompleted % 4 ? {} : { backgroundColor: 'var(--bg-input)', color: 'var(--text-muted)' }}
                   >
                     {i + 1}
                   </div>
